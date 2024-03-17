@@ -1,5 +1,5 @@
 import { getCompany } from "./db/companies.js";
-import { getJob, getJobs, getJobsByCompany } from "./db/jobs.js";
+import { getJob, getJobs, getJobsByCompany, createJob } from "./db/jobs.js";
 import { GraphQLError } from 'graphql';
 
 export const resolvers = {
@@ -18,6 +18,17 @@ export const resolvers = {
         throw notFoundError('No Company found with id ' + args.id);
       }
       return company;
+    },
+  },
+
+  Mutation: {
+    createJob: (parent, args, context) => {
+      const companyId = 'FjcJCHJALA4i';
+      return createJob({
+        companyId: companyId,
+        title: args.title,
+        description: args.description,
+      });
     },
   },
 
