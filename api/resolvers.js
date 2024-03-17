@@ -23,11 +23,12 @@ export const resolvers = {
 
   Mutation: {
     createJob: (parent, args, context) => {
+      console.log(args);
       const companyId = 'FjcJCHJALA4i';
       return createJob({
         companyId: companyId,
-        title: args.title,
-        description: args.description,
+        title: args.input.title,
+        description: args.input.description,
       });
     },
   },
