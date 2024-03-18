@@ -34,8 +34,15 @@ export const resolvers = {
         description: args.input.description,
       });
     },
-    deleteJob: (parent, args, context) => {
-      return deleteJob(args.id);
+    deleteJob: async (parent, args, context) => {
+      if (!context.user) {
+        throw unauthorizedError('Missing authentication');
+      };
+      const job = await deleteJob(args.id, context.user.companyId);
+      if (!job) {
+        throw notFoundError('Missing job');
+      };
+      return job;
     },
     updateJob: (parent, { input: { id, title, description } }, context) => {
       return updateJob({ id, title, description });
