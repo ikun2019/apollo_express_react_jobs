@@ -36,8 +36,8 @@ export async function deleteJob(id, companyId) {
   return job;
 }
 
-export async function updateJob({ id, title, description }) {
-  const job = await getJobTable().first().where({ id });
+export async function updateJob({ id, companyId, title, description }) {
+  const job = await getJobTable().first().where({ id, companyId });
   if (!job) {
     throw new Error(`Job not found: ${id}`);
   }

@@ -44,8 +44,15 @@ export const resolvers = {
       };
       return job;
     },
-    updateJob: (parent, { input: { id, title, description } }, context) => {
-      return updateJob({ id, title, description });
+    updateJob: async (parent, { input: { id, title, description } }, context) => {
+      if (!context.user) {
+        throw unauthorizedError('Missing authentication');
+      }
+      const job = await updateJob({ id, companyId, title, description });
+      if (!job) {
+        throw notFoundError('No Job found with id ' + id);
+      };
+      return job;
     },
   },
 
