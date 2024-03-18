@@ -23,8 +23,11 @@ export const resolvers = {
 
   Mutation: {
     createJob: (parent, args, context) => {
-      console.log(args);
-      const companyId = 'FjcJCHJALA4i';
+      console.log('context=>', context);
+      if (!context.user) {
+        throw unauthorizedError('Missing authentication');
+      }
+      const companyId = context.user.companyId;
       return createJob({
         companyId: companyId,
         title: args.input.title,
@@ -53,6 +56,12 @@ function notFoundError(message) {
   return new GraphQLError(message, {
     extensions: { code: 'NOT_FOUND' }
   });
+};
+
+function unauthorizedError(message) {
+  return new GraphQLError(message, {
+    extensions: { code: 'NOT_FOUND' }
+  })
 }
 
 function toIsoDate(value) {
