@@ -64,21 +64,27 @@ export async function getJobs() {
   return result.data.jobs;
 };
 
-const jobByIdQuery = gql`
-    query($jobId: ID!){
-      job(id: $jobId) {
-        id
-        title
-        date
-        description
-        company {
-          id
-          name
-          description
-        }
-      }
+const jobDetailFragment = gql`
+  fragment JobDetail on Job {
+    id
+    date
+    title
+    description
+    company{
+      id
+      name
     }
-  `;
+  }
+`;
+
+const jobByIdQuery = gql`
+  query($jobId: ID!){
+    job(id: $jobId) {
+      ...JobDetail
+    }
+  }
+  ${jobDetailFragment}
+`;
 
 export async function getJob(id) {
   // const data = await client.request(query, { jobId: id });
@@ -115,9 +121,10 @@ export async function createJob({ title, description }) {
   const mutation = gql`
     mutation($input: CreateJobInput!){
       job: createJob(input: $input) {
-        id
+        JobDetail
       }
     }
+    ${jobDetailFragment}
   `;
   // const data = await client.request(mutation, {
   //   input: { title, description },
