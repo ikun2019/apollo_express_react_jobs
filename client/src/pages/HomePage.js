@@ -1,17 +1,16 @@
-import { useEffect, useState } from 'react';
 import JobList from '../components/JobList';
-// import { jobs } from '../lib/fake-data';
-import { getJobs } from '../lib/graphql/queries';
-
-// getJobs().then((jobs) => console.log(jobs));
+import { useJobs } from '../lib/graphql/hooks';
 
 function HomePage() {
-  const [jobs, setJobs] = useState([]);
-  useEffect(() => {
-    getJobs().then((job) => {
-      setJobs(job);
-    });
-  }, []);
+  const { jobs, loading, error } = useJobs();
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+  if (error) {
+    return <div className='has-text-danger'>Data unavailable</div>
+  }
+
   return (
     <div>
       <h1 className="title">
