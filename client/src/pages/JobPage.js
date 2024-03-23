@@ -1,24 +1,18 @@
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../lib/formatters';
-import { useEffect, useState } from 'react';
-import { getJob } from '../lib/graphql/queries';
-// import { jobs } from '../lib/fake-data';
+import { useJob } from '../lib/graphql/hooks';
 
 function JobPage() {
   const { jobId } = useParams();
-  const [job, setJob] = useState();
-  useEffect(() => {
-    getJob(jobId).then((job) => {
-      setJob(job);
-    })
-  }, [jobId]);
-  if (!job) {
+  const { job, loading, error } = useJob(jobId);
+
+  if (loading) {
     return <div>Loading...</div>
   }
-
-  console.log(job);
-
+  if (error) {
+    return <div className='has-text-danger'>Data unavailable</div>
+  }
   return (
     <div>
       <h1 className="title is-2">

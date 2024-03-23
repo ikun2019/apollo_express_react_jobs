@@ -77,7 +77,7 @@ const jobDetailFragment = gql`
   }
 `;
 
-const jobByIdQuery = gql`
+export const jobByIdQuery = gql`
   query($jobId: ID!){
     job(id: $jobId) {
       ...JobDetail
