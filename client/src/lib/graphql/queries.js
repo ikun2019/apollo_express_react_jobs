@@ -81,31 +81,12 @@ export const companyByIdQuery = gql`
     }
   `;
 
-export async function createJob({ title, description }) {
-  const mutation = gql`
-    mutation($input: CreateJobInput!){
-      job: createJob(input: $input) {
-        JobDetail
-      }
-    }
-    ${jobDetailFragment}
-  `;
 
-  const result = await apolloClient.mutate({
-    mutation,
-    variables: {
-      input: {
-        title,
-        description
-      }
-    },
-    update: (cache, { data }) => {
-      cache.writeQuery({
-        query: jobByIdQuery,
-        variables: { id: data.job.id },
-        data,
-      });
-    },
-  });
-  return result.data.job;
-};
+export const createJobMutation = gql`
+  mutation CreateJob($input: CreateJobInput!){
+    job: createJob(input: $input) {
+      ...JobDetail
+    }
+  }
+  ${jobDetailFragment}
+`;
