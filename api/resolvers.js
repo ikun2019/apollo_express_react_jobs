@@ -4,7 +4,7 @@ import { GraphQLError } from 'graphql';
 
 export const resolvers = {
   Query: {
-    jobs: () => getJobs(),
+    jobs: (parent, args, context) => getJobs(args.limit, args.offset),
     job: async (parent, args, context) => {
       const job = await getJob(args.id);
       if (!job) {
